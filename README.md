@@ -1,19 +1,19 @@
 # HiveBoxProject
-We created a simple docker app, that for now only prints the current version of our development.
----
-in order to run the docker file you must ofcourse install all the needed dependencies, such as docker, etc. Then use :
-```bash 
-git clone <your-repo>
-```
-navigate to you project folder 
-```bash 
-cd /path/hiveboxproject
-```
-then we build and run the container
-```bash
-docker build -t hive .
-docker run --rm hive
-```
-if all went smoothly we should get :
- Running version: v0.0.1
+In this DevOps end-to-end hands-on project, we will utilize the technology and open-source software to build an API to track the environmental sensor data from openSenseMap, a platform for open sensor data in which everyone can participate.
+
+In this project, you will cover many topics:
+
+- Software Production.
+- Agile Planning.
+- QA and Quality Gates.
+- Code and Programming.
+- Operating System.
+- Docker Containers.
+- Kubernetes and Cloud.
+- Observability and Monitoring.
+- Continuous Integration/Delivery/Deployment.
+- Automation and Infrastructure as Code.
+--- 
+## Goal 
+![alt text](image.png)
 
