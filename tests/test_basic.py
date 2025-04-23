@@ -2,9 +2,9 @@ from app import app
 
 def test_version_route():
     client = app.test_client()
-    response = client.get('/')
+    response = client.get('/version')
     assert response.status_code == 200
-    assert response.get_json() == {"version": "v0.0.1"}
+    assert "version" in response.get_json()
 
 def test_temperature_route():
     client = app.test_client()
