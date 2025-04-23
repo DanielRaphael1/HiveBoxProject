@@ -12,6 +12,7 @@ spec:
       labels:
         app: flask-app
     spec:
+      automountServiceAccountToken: false
       imagePullSecrets:
         - name: ghcr-creds
       containers:
@@ -32,3 +33,10 @@ spec:
               value: "5ade1acf223bd80019a1011c"
             - name: BOX3_TEMP_ID
               value: "5ade1acf223bd80019a1011e"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
