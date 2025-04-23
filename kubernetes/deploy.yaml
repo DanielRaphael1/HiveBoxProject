@@ -487,6 +487,10 @@ spec:
           requests:
             cpu: 100m
             memory: 90Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -546,6 +550,7 @@ spec:
         - --host=ingress-nginx-controller-admission,ingress-nginx-controller-admission.$(POD_NAMESPACE).svc
         - --namespace=$(POD_NAMESPACE)
         - --secret-name=ingress-nginx-admission
+        
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -564,6 +569,13 @@ spec:
           runAsUser: 65532
           seccompProfile:
             type: RuntimeDefault
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
       nodeSelector:
         kubernetes.io/os: linux
       restartPolicy: OnFailure
@@ -617,6 +629,13 @@ spec:
           runAsUser: 65532
           seccompProfile:
             type: RuntimeDefault
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+        limits:
+            memory: "128Mi"
+            cpu: "100m"
       nodeSelector:
         kubernetes.io/os: linux
       restartPolicy: OnFailure
