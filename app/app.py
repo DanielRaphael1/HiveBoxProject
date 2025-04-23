@@ -2,12 +2,13 @@ from flask import Flask, jsonify
 import requests
 from datetime import datetime, timedelta
 import os
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
-VERSION = "v0.0.1"  # or load from file
+VERSION = "v0.0.2"
 
-# Define 3 boxes with their corresponding temperature sensor IDs
 BOXES = [
     {
         "name": "Box A",
@@ -21,12 +22,12 @@ BOXES = [
     },
     {
         "name": "Box C",
-        "box_id": os.getenv("BOX3_ID", " 5ade1acf223bd80019a1011c"),
+        "box_id": os.getenv("BOX3_ID", "5ade1acf223bd80019a1011c"),
         "sensor_id": os.getenv("BOX3_TEMP_ID", "5ade1acf223bd80019a1011e")
     }
 ]
 
-@app.route('/')
+@app.route('/version')
 def version():
     return {"version": VERSION}
 
@@ -42,20 +43,36 @@ def temperature():
             res = requests.get(url)
             res.raise_for_status()
             data = res.json()
+
+            temps = [float(d["value"]) for d in data if "value" in d]
+            avg_temp = sum(temps) / len(temps) if temps else None
+
+            # Determine status
+            if avg_temp is not None:
+                if avg_temp < 10:
+                    status = "Too Cold"
+                elif avg_temp > 37:
+                    status = "Too Hot"
+                else:
+                    status = "Good"
+            else:
+                status = "No Data"
+
             results.append({
                 "box": box["name"],
                 "sensor_id": box["sensor_id"],
                 "measurements_last_hour": data,
-                "count": len(data)
+                "count": len(data),
+                "average_temperature": avg_temp,
+                "status": status
             })
         except Exception as e:
             results.append({
                 "box": box["name"],
                 "error": str(e)
             })
-            
+
     return jsonify(results)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
-

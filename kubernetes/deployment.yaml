@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: ghcr-creds
+      containers:
+        - name: flask-app
+          image: ghcr.io/danielraphael1/version-app:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: BOX1_ID
+              value: "5eba5fbad46fb8001b799786"
+            - name: BOX1_TEMP_ID
+              value: "5eba5fbad46fb8001b799789"
+            - name: BOX2_ID
+              value: "5c21ff8f919bf8001adf2488"
+            - name: BOX2_TEMP_ID
+              value: "5c21ff8f919bf8001adf248d"
+            - name: BOX3_ID
+              value: "5ade1acf223bd80019a1011c"
+            - name: BOX3_TEMP_ID
+              value: "5ade1acf223bd80019a1011e"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
